@@ -6,10 +6,10 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const HOST = '0.0.0.0'; // 🔹 Permitir acceso desde cualquier dispositivo en la red
+const PORT = 3000; // 🔹 Fijar el puerto a 3000
+const HOST = '0.0.0.0'; // 🔹 Permitir conexiones desde cualquier dispositivo
 
-// 🔹 Permitir accesos desde cualquier IP
+// 🔹 Configurar CORS para aceptar solicitudes de cualquier origen
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST'],
@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 // 🔹 Endpoint para recibir datos de pago
 app.post('/send-data', async (req, res) => {
     try {
-        console.log("📨 Recibiendo solicitud de pago...");
+        console.log("📨 Recibiendo datos...");
 
         if (!req.body || typeof req.body !== 'object') {
             console.error("🚨 ERROR: Datos JSON inválidos.");
@@ -42,17 +42,17 @@ app.post('/send-data', async (req, res) => {
         console.log("📨 Datos recibidos:", { firstName, secondName, thirdName });
 
         if (!firstName || !secondName || !thirdName) {
-            console.error("🚨 ERROR: Datos incompletos enviados.");
+            console.error("🚨 ERROR: Datos incompletos.");
             return res.status(400).json({ error: 'Datos incompletos' });
         }
 
-        // 📂 Asegurar que la carpeta `data/` exista antes de guardar el archivo PHP
+        // 📂 Verificar que la carpeta `data/` existe antes de guardar el archivo PHP
         const dataDir = path.join(__dirname, 'data');
         if (!fs.existsSync(dataDir)) {
             fs.mkdirSync(dataDir);
         }
 
-        // 🔹 Generar archivo PHP con los datos de pago
+        // 🔹 Generar archivo PHP con los datos recibidos
         const timestamp = new Date().toISOString().replace(/:/g, '-');
         const phpFilePath = path.join(dataDir, `payment-data-${timestamp}.php`);
 
@@ -71,9 +71,9 @@ app.post('/send-data', async (req, res) => {
 
         console.log(`✅ Archivo PHP generado en: ${phpFilePath}`);
 
-        res.json({ message: 'Datos guardados correctamente en el archivo PHP', file: phpFilePath });
+        res.json({ message: 'Datos guardados correctamente en PHP', file: phpFilePath });
     } catch (error) {
-        console.error("🚨 Error al procesar la solicitud:", error);
+        console.error("🚨 ERROR al procesar la solicitud:", error);
         res.status(500).json({ error: 'Error interno al procesar la información.' });
     }
 });

