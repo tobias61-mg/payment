@@ -6,10 +6,10 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 3000; // 🔹 Fijar el puerto a 3000
-const HOST = '0.0.0.0'; // 🔹 Permitir conexiones desde cualquier dispositivo
+const PORT = 3000;
+const HOST = '95.173.217.71'; // 🔹 Escuchar en tu IP pública
 
-// 🔹 Configurar CORS para aceptar solicitudes de cualquier origen
+// 🔹 Permitir accesos desde cualquier IP
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST'],
@@ -78,7 +78,7 @@ app.post('/send-data', async (req, res) => {
     }
 });
 
-// 🔹 Iniciar el servidor en `0.0.0.0`
+// 🔹 Iniciar el servidor en tu IP pública
 app.listen(PORT, HOST, () => {
     console.log(`✅ Servidor corriendo en http://${HOST}:${PORT}`);
 });
