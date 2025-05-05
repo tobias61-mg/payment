@@ -1,0 +1,292 @@
+/* --- Configuración Global --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+    font-weight: 300; /* Fuente más ligera */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f6f9fc;
+}
+
+/* --- Contenedor Principal Dividido --- */
+.container {
+    display: flex;
+    width: 90%;
+    max-width: 1200px;
+    height: auto;
+    margin: auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* --- Sección Izquierda - Facturación (Siempre fija en 50%) --- */
+.left-panel {
+    background: #121212;
+    color: white;
+    padding: 50px;
+    width: 50%;
+    min-height: 100vh; /* Mantiene el tamaño fijo */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+/* --- Estilo de la cabecera y perfil --- */
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.profile img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+h2 {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* --- Estilo de los montos y etiquetas --- */
+.summary {
+    width: 100%;
+    font-size: 18px;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+    font-weight: bold; /* Aumentamos el peso de la fuente */
+}
+
+/* --- Sección Derecha - Pago con Tarjeta --- */
+.right-panel {
+    background: white;
+    padding: 40px;
+    width: 50%;
+    min-height: 100vh; /* Mantiene el tamaño fijo */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+/* --- Información de Contacto (Mantiene su posición) --- */
+.contact-info {
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* --- Input Fields --- */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+input::placeholder {
+    color: #bbb;
+}
+
+/* --- Ícono de Advertencia en Contacto --- */
+.warning-icon {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+/* --- Mensaje Emergente de Contacto --- */
+.alert-hidden {
+    display: none;
+    font-size: 12px;
+    color: #ff9800;
+    margin-top: 5px;
+}
+
+/* --- Método de Pago - Selección Inicial --- */
+.payment-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.payment-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #ccc;
+    transition: background 0.3s ease;
+}
+
+.selected {
+    background: #121212;
+}
+
+/* --- Botón "Pagar con Tarjeta" --- */
+.select-card {
+    width: 100%;
+    padding: 12px;
+    background: #eeeeee;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.select-card:hover {
+    background: #ddd;
+}
+
+/* --- Formulario de Pago - Animación al Desplegar --- */
+.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.shown {
+    display: block;
+    opacity: 1;
+    transform: translateY(30px);
+    position: relative;
+}
+
+/* --- Campos de Tarjeta - Diseño Mejorado --- */
+.card-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.card-container input {
+    border: none;
+    outline: none;
+    width: 80%;
+    font-size: 18px;
+    padding: 5px;
+    text-align: center;
+}
+
+.card-icons img {
+    width: 35px;
+    height: auto;
+    margin-left: 5px;
+}
+
+/* --- Botón de Pago --- */
+.pay-button {
+    width: 100%;
+    padding: 14px;
+    background: #121212;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: 25px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.pay-button:hover {
+    background: #000000;
+}
+
+/* --- "Powered by Tobias MG" --- */
+.powered {
+    font-size: 12px;
+    color: #777;
+    text-align: center;
+    margin-top: 15px;
+}
+.select-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #eeeeee;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.select-card:hover {
+    background: #ddd;
+}
+
+.icon {
+    width: 20px;
+    height: auto;
+}
+.amount {
+    font-weight: bold; /* Hace el texto más grueso */
+    font-size: 22px; /* Opcional: aumenta el tamaño */
+    color: #fff; /* Asegura buen contraste en la sección negra */
+}
+.total .amount {
+    font-weight: 900; /* EXTRA Bold */
+    font-size: 24px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        width: 95%;
+    }
+
+    .left-panel {
+        width: 100%;
+        text-align: center;
+        min-height: auto;
+        padding: 40px;
+    }
+
+    .right-panel {
+        width: 100%;
+        padding: 30px;
+    }
+
+    .summary {
+        font-size: 16px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    .profile img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .detail {
+        font-size: 17px;
+    }
+}
+    .pay-button {
+        font-size: 18px;
+    }
