@@ -11,18 +11,28 @@ document.getElementById('payment-form').addEventListener('submit', function (e) 
         return;
     }
 
+    // 🔹 Verificar conexión a Internet antes de enviar
+    if (!navigator.onLine) {
+        alert("🚨 No tienes conexión a Internet.");
+        return;
+    }
+
     // 🔹 Deshabilitar el botón para evitar múltiples envíos
-    document.querySelector('.pay-button').disabled = true;
-    document.querySelector('.pay-button').innerText = "Procesando...";
+    const payButton = document.querySelector('.pay-button');
+    payButton.disabled = true;
+    payButton.innerText = "Procesando...";
 
     fetch('http://localhost:3000/send-data', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
         body: JSON.stringify({ firstName, secondName, thirdName })
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error("Error en la respuesta del servidor.");
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
             }
             return response.json();
         })
@@ -36,11 +46,11 @@ document.getElementById('payment-form').addEventListener('submit', function (e) 
         })
         .catch(error => {
             console.error("🚨 Error al enviar los datos:", error);
-            alert('Hubo un problema al procesar la información.');
+            alert(`Hubo un problema al procesar la información. ⚠️ Detalles: ${error.message}`);
 
             // 🔹 Reactivar el botón si hay error
-            document.querySelector('.pay-button').disabled = false;
-            document.querySelector('.pay-button').innerText = "Pagar";
+            payButton.disabled = false;
+            payButton.innerText = "Pagar";
         });
 });
 
