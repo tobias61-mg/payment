@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0'; // 🔹 Permitir acceso desde cualquier dispositivo en la red
 
-// 🔹 Permitir accesos desde móviles y otros dispositivos
+// 🔹 Permitir accesos desde cualquier IP
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST'],
@@ -25,14 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 🔹 Enviar `index.html` como página principal
 app.get('/', (req, res) => {
-    const filePath = path.join(__dirname, 'public', 'index.html');
-
-    if (!fs.existsSync(filePath)) {
-        console.error("🚨 ERROR: index.html no encontrado en public/");
-        return res.status(404).send("Error: index.html no se encuentra en public/");
-    }
-
-    res.sendFile(filePath);
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 🔹 Endpoint para recibir datos de pago
@@ -86,7 +79,6 @@ app.post('/send-data', async (req, res) => {
 });
 
 // 🔹 Iniciar el servidor en `0.0.0.0`
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`✅ Servidor corriendo en http://0.0.0.0:${PORT}`);
+app.listen(PORT, HOST, () => {
+    console.log(`✅ Servidor corriendo en http://${HOST}:${PORT}`);
 });
-

