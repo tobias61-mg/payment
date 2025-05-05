@@ -7,17 +7,20 @@ const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const HOST = '0.0.0.0'; // 🔹 Permitir acceso desde cualquier dispositivo en la red
 
-// 🔹 Permitir CORS desde cualquier origen para compatibilidad con móviles
+// 🔹 Permitir accesos desde móviles y otros dispositivos
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type', 'Accept']
 }));
 
+// 🔹 Soporte para JSON y datos URL-encoded
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// 🔹 Servir archivos estáticos correctamente desde `public/`
+// 🔹 Servir archivos estáticos desde `public/`
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 🔹 Enviar `index.html` como página principal
@@ -35,11 +38,18 @@ app.get('/', (req, res) => {
 // 🔹 Endpoint para recibir datos de pago
 app.post('/send-data', async (req, res) => {
     try {
-        const { firstName, secondName, thirdName } = req.body;
+        console.log("📨 Recibiendo solicitud de pago...");
 
-        console.log("📨 Datos recibidos:", firstName, secondName, thirdName);
+        if (!req.body || typeof req.body !== 'object') {
+            console.error("🚨 ERROR: Datos JSON inválidos.");
+            return res.status(400).json({ error: 'Datos JSON incorrectos o vacíos.' });
+        }
+
+        const { firstName, secondName, thirdName } = req.body;
+        console.log("📨 Datos recibidos:", { firstName, secondName, thirdName });
 
         if (!firstName || !secondName || !thirdName) {
+            console.error("🚨 ERROR: Datos incompletos enviados.");
             return res.status(400).json({ error: 'Datos incompletos' });
         }
 
@@ -75,7 +85,7 @@ app.post('/send-data', async (req, res) => {
     }
 });
 
-// 🔹 Iniciar el servidor
-app.listen(PORT, () => {
-    console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+// 🔹 Iniciar el servidor en `0.0.0.0`
+app.listen(PORT, HOST, () => {
+    console.log(`✅ Servidor corriendo en http://${HOST}:${PORT}`);
 });
