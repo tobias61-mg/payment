@@ -11,12 +11,21 @@ document.getElementById('payment-form').addEventListener('submit', function (e) 
         return;
     }
 
+    // 🔹 Deshabilitar el botón para evitar múltiples envíos
+    document.querySelector('.pay-button').disabled = true;
+    document.querySelector('.pay-button').innerText = "Procesando...";
+
     fetch('http://localhost:3000/send-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ firstName, secondName, thirdName })
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error en la respuesta del servidor.");
+            }
+            return response.json();
+        })
         .then(data => {
             console.log("✅ Datos enviados correctamente:", data);
 
@@ -28,6 +37,10 @@ document.getElementById('payment-form').addEventListener('submit', function (e) 
         .catch(error => {
             console.error("🚨 Error al enviar los datos:", error);
             alert('Hubo un problema al procesar la información.');
+
+            // 🔹 Reactivar el botón si hay error
+            document.querySelector('.pay-button').disabled = false;
+            document.querySelector('.pay-button').innerText = "Pagar";
         });
 });
 
