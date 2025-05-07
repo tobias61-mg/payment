@@ -1,5 +1,12 @@
 {
-    "rewrites": [
-      { "source": "/(.*)", "destination": "/" }
-    ]
+    "name": "payment",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+      "start": "node api/send-data.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2"
+    }
   }
+  
