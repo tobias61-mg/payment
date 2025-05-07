@@ -6,15 +6,14 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 4000;
-const HOST = 'localhost';
+const PORT = process.env.PORT || 4000; // 🔹 Usar el puerto asignado por Vercel
 
 // 🔹 Middleware para procesar JSON correctamente
 app.use(express.json()); 
 
-// 🔹 Configurar CORS para aceptar solicitudes de localhost
+// 🔹 Configurar CORS para aceptar solicitudes desde cualquier origen
 app.use(cors({
-    origin: 'http://localhost',
+    origin: '*',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Accept']
 }));
@@ -22,25 +21,10 @@ app.use(cors({
 // 🔹 Servir archivos estáticos desde `public/`
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// 🔹 Servir `index.html` correctamente desde la raíz
-app.get('/', (req, res) => {
-    const filePath = path.join(__dirname, 'index.html');
-
-    if (!fs.existsSync(filePath)) {
-        console.error("🚨 ERROR: index.html no encontrado en la raíz.");
-        return res.status(404).send("Error: index.html no se encuentra en la raíz.");
-    }
-
-    res.sendFile(filePath);
-});
-
-// 🔹 Endpoint para recibir datos de pago
-app.post('/send-data', async (req, res) => {
+// 🔹 Endpoint para recibir datos de pago (Ahora en `/api/send-data`)
+app.post('/api/send-data', async (req, res) => {
     try {
-        console.log("📨 Recibiendo datos...");
-
-        // 🔹 Verificar si los datos llegaron correctamente
-        console.log("📨 Datos recibidos en el servidor:", req.body);
+        console.log("📨 Recibiendo datos en Vercel...");
 
         if (!req.body || typeof req.body !== 'object') {
             console.error("🚨 ERROR: Datos JSON inválidos.");
@@ -86,7 +70,7 @@ app.post('/send-data', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 4000; // ✅ Usa el puerto de Vercel
+// 🔹 Iniciar el servidor
 app.listen(PORT, () => {
     console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
 });

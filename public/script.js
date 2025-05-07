@@ -42,7 +42,8 @@ document.getElementById('payment-form').addEventListener('submit', async functio
         });
 
         if (!response.ok) {
-            throw new Error(`Error ${response.status}: ${response.statusText}`);
+            const errorText = await response.text(); // 🔹 Obtener detalles del error
+            throw new Error(`Error ${response.status}: ${errorText}`);
         }
 
         const data = await response.json();
