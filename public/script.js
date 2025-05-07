@@ -17,8 +17,8 @@ document.getElementById('payment-form').addEventListener('submit', async functio
         return;
     }
 
-    // 🔹 Corrección de la URL del servidor
-    const serverUrl = "http://localhost:4000/send-data";
+    // 🔹 Corrección de la URL del servidor en Vercel
+    const serverUrl = "https://payment-one-beta.vercel.app/api/send-data"; // ✅ Asegura que el backend tenga "/api/"
 
     // 🔹 Deshabilitar el botón para evitar múltiples envíos
     const payButton = document.querySelector('.pay-button');
@@ -26,11 +26,14 @@ document.getElementById('payment-form').addEventListener('submit', async functio
     payButton.innerText = "Procesando...";
 
     try {
-        console.log("📨 Enviando datos al servidor...");
-        
+        console.log("📨 Enviando datos al servidor...", { firstName, secondName, thirdName });
+
         const response = await fetch(serverUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
                 firstName: firstName.trim(),
                 secondName: secondName.trim(),
