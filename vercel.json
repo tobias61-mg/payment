@@ -1,12 +1,15 @@
 {
-    "name": "payment",
-    "version": "1.0.0",
-    "type": "module",
-    "scripts": {
-      "start": "node api/send-data.js"
+    "version": 2,
+    "functions": {
+      "api/send-data.js": {
+        "runtime": "nodejs"
+      }
     },
-    "dependencies": {
-      "express": "^4.18.2"
-    }
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/$1"
+      }
+    ]
   }
   
