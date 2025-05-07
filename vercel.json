@@ -1,9 +1,15 @@
 {
     "version": 2,
     "functions": {
-      "api/send-data.php": {
-        "runtime": "now-php@1.0.0"
+      "api/send-data.js": {
+        "runtime": "nodejs16.x"
       }
-    }
+    },
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/$1"
+      }
+    ]
   }
   
