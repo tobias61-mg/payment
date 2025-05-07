@@ -86,7 +86,7 @@ app.post('/send-data', async (req, res) => {
     }
 });
 
-// 🔹 Iniciar el servidor SOLO en localhost:4000
-app.listen(PORT, HOST, () => {
-    console.log(`✅ Servidor corriendo en http://${HOST}:${PORT}`);
+const PORT = process.env.PORT || 4000; // ✅ Usa el puerto de Vercel
+app.listen(PORT, () => {
+    console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
 });
